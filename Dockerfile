@@ -11,5 +11,5 @@ FROM alpine
 COPY --from=builder /service-meurig .
 
 
-EXPOSE 7777
+EXPOSE 80
 CMD [ "/service-meurig" ]

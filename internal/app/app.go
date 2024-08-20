@@ -22,8 +22,16 @@ func Run() error {
 	}
 	q := datastore.New(conn)
 
+	host, port := os.Getenv("HOST"), os.Getenv("PORT")
+	if host == "" {
+		host = "0.0.0.0"
+	}
+	if port == "" {
+		port = "80"
+	}
+
 	srv := http.Server{
-		Addr:    fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT")),
+		Addr:    fmt.Sprintf("%s:%s", host, port),
 		Handler: router.New(q),
 	}
 	errCh := make(chan error)
@@ -37,6 +45,7 @@ func Run() error {
 	log.Println("server started")
 	select {
 	case <-shutCh:
+		log.Println("shutting down...")
 		return srv.Shutdown(ctx)
 	case err := <-errCh:
 		return fmt.Errorf("server errored: %w", err)

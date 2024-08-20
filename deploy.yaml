@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-meurig
+spec:
+  selector:
+    matchLabels:
+      app: service-meurig
+  template:
+    metadata:
+      labels:
+        app: service-meurig
+    spec:
+      containers:
+      - name: service-meurig
+        image: ko://github.com/izaakdale/service-meurig
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        env:
+        - name: DATABASE_CONNECTION_STRING
+          value: "postgresql://postgres:postgres@db.postgres.svc.cluster.local:5432/ordering-app?sslmode=disable"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-meurig
+spec:
+  selector:
+    app: service-meurig
+  ports:
+  - port: 80
+    targetPort: 80
