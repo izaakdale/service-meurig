@@ -39,9 +39,9 @@ func New(cli dbClient) http.Handler {
 	mux.Get("/orders", getCustomerOrder(cli))
 	mux.Post("/orders", createOrder(cli))
 
-	mux.Put(fmt.Sprintf("/orders/{%s}/status", orderIDPathValue), updateOrderStatus(cli))
-	mux.Post(fmt.Sprintf("/orders/{%s}/items", orderIDPathValue), addItem(cli))
-	mux.Get(fmt.Sprintf("/orders/{%s}/items", orderIDPathValue), getOrderItems(cli))
+	mux.Put(fmt.Sprintf("/orders/{%s}", orderIDPathValue), updateOrderStatus(cli))
+	mux.Post(fmt.Sprintf("/orders/{%s}", orderIDPathValue), addItem(cli))
+	mux.Get(fmt.Sprintf("/orders/{%s}", orderIDPathValue), getOrderItems(cli))
 
 	return mux
 }

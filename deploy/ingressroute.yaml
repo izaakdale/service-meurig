@@ -1,0 +1,29 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: stripprefix
+  namespace: apps
+spec:
+  stripPrefix:
+    prefixes:
+      - /service-meurig
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: service-meurig
+  namespace: apps
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: HostRegexp(`^(?:[^.]+\.)?izaakserver\.com$`) && PathPrefix(`/service-meurig`)
+      services:
+        - kind: Service
+          name: service-meurig
+          namespace: apps
+          port: 80
+      middlewares:
+        - name: stripprefix
+          namespace: apps

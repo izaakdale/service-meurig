@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: service-meurig
+  namespace: apps
 spec:
   selector:
     matchLabels:
@@ -22,12 +23,13 @@ spec:
         - containerPort: 80
         env:
         - name: DATABASE_CONNECTION_STRING
-          value: "postgresql://postgres:postgres@db.postgres.svc.cluster.local:5432/ordering-app?sslmode=disable"
+          value: "postgresql://postgres:postgres@postgres.db.svc.cluster.local:5432/ordering-app?sslmode=disable"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: service-meurig
+  namespace: apps
 spec:
   selector:
     app: service-meurig
